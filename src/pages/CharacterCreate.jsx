@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import CharacterForm from "../components/CharacterForm";
+import CharacterForm from "./components/CharacterForm.jsx";
 
 export default function CharacterCreate() {
     const { id: campaignId } = useParams();

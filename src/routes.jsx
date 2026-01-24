@@ -6,7 +6,7 @@ import Campaigns from "./pages/Campaigns";
 import CampaignDetail from "./pages/CampaignDetail";
 import Register from "./pages/Register.jsx";
 import ProtectedRoute from "./auth/ProtectedRoute.jsx";
-
+import CharacterCreate from "./pages/CharacterCreate.jsx"
 
 export const router = createBrowserRouter([
     {path: "/login", element: <Login/>},
