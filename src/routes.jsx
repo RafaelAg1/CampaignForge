@@ -7,6 +7,7 @@ import CampaignDetail from "./pages/CampaignDetail";
 import Register from "./pages/Register.jsx";
 import ProtectedRoute from "./auth/ProtectedRoute.jsx";
 import CharacterCreate from "./pages/CharacterCreate.jsx"
+import Characters from "./pages/Characters.jsx"
 
 export const router = createBrowserRouter([
     {path: "/login", element: <Login/>},
@@ -23,7 +24,9 @@ export const router = createBrowserRouter([
                     {index: true, element: <Dashboard/>},
                     {path: "campaigns", element: <Campaigns/>},
                     { path: "campaigns/:id", element: <CampaignDetail /> }, // ✅ AÑADE ESTO
+                    {path: "campaigns/:id/characters", element: <Characters/>},
                     { path: "campaigns/:id/characters/create", element: <CharacterCreate /> },
+
                 ],
             },
         ],
