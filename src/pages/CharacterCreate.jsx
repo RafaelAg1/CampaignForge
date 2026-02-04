@@ -8,14 +8,14 @@ export default function CharacterCreate() {
     const handleSubmit = (characterData) => {
         const newCharacter = {
             id: crypto.randomUUID(),
-            campaignId,
+            campaignId: campaignId,
             ...characterData,
         };
 
         const prev = JSON.parse(localStorage.getItem("characters") || "[]");
         localStorage.setItem("characters", JSON.stringify([...prev, newCharacter]));
 
-        navigate(`/campaigns/${campaignId}`);
+        navigate(`/campaigns/${campaignId}/characters`);
     };
 
     return (

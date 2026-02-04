@@ -1,12 +1,20 @@
 import {Trash} from 'lucide-react';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 export default function CampaignCard({campaign, onDelete}) {
     const navigate = useNavigate();
+
+    const personajes = JSON.parse(localStorage.getItem("characters") || "[]")
+    const personajeCampana = personajes.filter((p) => p.campaignId === campaign.id);
+
+
+
     return (
         <div className="bg-white text-gray-900 rounded-lg shadow p-4 flex flex-col gap-3">
             <h2 className="text-xl font-bold">{campaign.name}</h2>
-
+            <div>
+                <p>Número de personajes: {personajeCampana.length}</p>
+            </div>
             <div
                 className="prose max-w-none"
                 dangerouslySetInnerHTML={{
