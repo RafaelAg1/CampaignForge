@@ -4,13 +4,33 @@ import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 
+// Componentes fuera del render
+const ToolbarButton = ({ onClick, isActive, children, title }) => (
+    <button
+        type="button"
+        onClick={onClick}
+        title={title}
+        className={`px-3 py-1.5 rounded-md border transition-all duration-200 font-medium text-sm
+            ${isActive
+            ? 'bg-amber-500 border-amber-400 text-white shadow-md shadow-amber-500/30'
+            : 'bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600 hover:border-slate-500'
+        }`}
+    >
+        {children}
+    </button>
+);
+
+const ToolbarDivider = () => (
+    <div className="w-px h-6 bg-slate-600"></div>
+);
+
 export default function TiptapEditor({ value, onChange }) {
     const editor = useEditor({
         extensions: [
             StarterKit,
             Underline,
             Link.configure({
-                openOnClick: false, // para que no te abra el link al clickar mientras editas
+                openOnClick: false,
                 autolink: true,
                 linkOnPaste: true,
             }),
@@ -30,7 +50,7 @@ export default function TiptapEditor({ value, onChange }) {
         const previousUrl = editor.getAttributes("link").href;
         const url = window.prompt("URL", previousUrl || "");
 
-        if (url === null) return; // cancel
+        if (url === null) return;
         if (url === "") {
             editor.chain().focus().unsetLink().run();
             return;
@@ -40,113 +60,172 @@ export default function TiptapEditor({ value, onChange }) {
     };
 
     return (
-        <div className="w-full border rounded">
+        <div className="w-full border border-slate-600 rounded-lg bg-slate-900/50 overflow-hidden">
             {/* Toolbar */}
-            <div className="flex flex-wrap gap-2 p-2 border-b bg-gray-50 text-white">
-                <button
-                    type="button"
+            <div className="flex flex-wrap gap-2 p-3 border-b border-slate-600 bg-slate-800/80">
+                {/* Headings */}
+                <ToolbarButton
                     onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                    className={`px-2 py-1 rounded border bg-black ${editor.isActive("heading", { level: 1 }) ? "bg-gray-200" : ""}`}
+                    isActive={editor.isActive("heading", { level: 1 })}
+                    title="Encabezado 1"
                 >
                     H1
-                </button>
-                <button
-                    type="button"
+                </ToolbarButton>
+                <ToolbarButton
                     onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                    className={`px-2 py-1 rounded border bg-black${editor.isActive("heading", { level: 2 }) ? "bg-gray-200" : ""}`}
+                    isActive={editor.isActive("heading", { level: 2 })}
+                    title="Encabezado 2"
                 >
                     H2
-                </button>
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().setParagraph().run()}
-                    className="px-2 py-1 rounded border bg-black"
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                    isActive={editor.isActive("heading", { level: 3 })}
+                    title="Encabezado 3"
                 >
-                    P
-                </button>
+                    H3
+                </ToolbarButton>
 
-                {/* Marks */}
-                <button
-                    type="button"
+                <ToolbarDivider />
+
+                {/* Text Formatting */}
+                <ToolbarButton
                     onClick={() => editor.chain().focus().toggleBold().run()}
-                    className={`px-2 py-1 rounded border bg-black font-bold ${editor.isActive("bold") ? "bg-gray-200" : ""}`}
+                    isActive={editor.isActive("bold")}
+                    title="Negrita"
                 >
-                    B
-                </button>
-                <button
-                    type="button"
+                    <span className="font-bold">B</span>
+                </ToolbarButton>
+                <ToolbarButton
                     onClick={() => editor.chain().focus().toggleItalic().run()}
-                    className={`px-2 py-1 rounded border bg-black italic ${editor.isActive("italic") ? "bg-gray-200" : ""}`}
+                    isActive={editor.isActive("italic")}
+                    title="Cursiva"
                 >
-                    I
-                </button>
-                <button
-                    type="button"
+                    <span className="italic">I</span>
+                </ToolbarButton>
+                <ToolbarButton
                     onClick={() => editor.chain().focus().toggleUnderline().run()}
-                    className={`px-2 py-1 rounded border bg-black underline ${editor.isActive("underline") ? "bg-gray-200" : ""}`}
+                    isActive={editor.isActive("underline")}
+                    title="Subrayado"
                 >
-                    U
-                </button>
+                    <span className="underline">U</span>
+                </ToolbarButton>
+
+                <ToolbarDivider />
 
                 {/* Lists */}
-                <button
-                    type="button"
+                <ToolbarButton
                     onClick={() => editor.chain().focus().toggleBulletList().run()}
-                    className={`px-2 py-1 rounded border bg-black ${editor.isActive("bulletList") ? "bg-gray-200" : ""}`}
+                    isActive={editor.isActive("bulletList")}
+                    title="Lista con viñetas"
                 >
                     • Lista
-                </button>
-                <button
-                    type="button"
+                </ToolbarButton>
+                <ToolbarButton
                     onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                    className={`px-2 py-1 rounded border bg-black ${editor.isActive("orderedList") ? "bg-gray-200" : ""}`}
+                    isActive={editor.isActive("orderedList")}
+                    title="Lista numerada"
                 >
                     1. Lista
-                </button>
+                </ToolbarButton>
 
-                {/* Link */}
-                <button
-                    type="button"
+                <ToolbarDivider />
+
+                {/* Links */}
+                <ToolbarButton
                     onClick={setLink}
-                    className={`px-2 py-1 rounded border bg-black ${editor.isActive("link") ? "bg-gray-200" : ""}`}
+                    isActive={editor.isActive("link")}
+                    title="Insertar enlace"
                 >
-                    Link
-                </button>
-                <button
-                    type="button"
-                    onClick={() => editor.chain().focus().unsetLink().run()}
-                    className="px-2 py-1 rounded border bg-black"
-                >
-                    Quitar link
-                </button>
+                    🔗 Link
+                </ToolbarButton>
+                {editor.isActive("link") && (
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().unsetLink().run()}
+                        isActive={false}
+                        title="Quitar enlace"
+                    >
+                        ✕ Link
+                    </ToolbarButton>
+                )}
 
-                {/* Align (opcional) */}
-                <button
-                    type="button"
+                <ToolbarDivider />
+
+                {/* Text Alignment */}
+                <ToolbarButton
                     onClick={() => editor.chain().focus().setTextAlign("left").run()}
-                    className="px-2 py-1 rounded border bg-black"
+                    isActive={editor.isActive({ textAlign: "left" })}
+                    title="Alinear a la izquierda"
                 >
-                    ⬅
-                </button>
-                <button
-                    type="button"
+                    <span className="flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h10M4 18h16" />
+                        </svg>
+                    </span>
+                </ToolbarButton>
+                <ToolbarButton
                     onClick={() => editor.chain().focus().setTextAlign("center").run()}
-                    className="px-2 py-1 rounded border bg-black"
+                    isActive={editor.isActive({ textAlign: "center" })}
+                    title="Centrar texto"
                 >
-                    ⬍
-                </button>
-                <button
-                    type="button"
+                    <span className="flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M7 12h10M4 18h16" />
+                        </svg>
+                    </span>
+                </ToolbarButton>
+                <ToolbarButton
                     onClick={() => editor.chain().focus().setTextAlign("right").run()}
-                    className="px-2 py-1 rounded border bg-black"
+                    isActive={editor.isActive({ textAlign: "right" })}
+                    title="Alinear a la derecha"
                 >
-                    ➡
-                </button>
+                    <span className="flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M10 12h10M4 18h16" />
+                        </svg>
+                    </span>
+                </ToolbarButton>
             </div>
 
-            {/* Editor */}
-            <div className="p-3">
-                <EditorContent editor={editor} className="min-h-[160px] outline" />
+            {/* Editor Content */}
+            <div className="p-4 text-slate-100">
+                <EditorContent
+                    editor={editor}
+                    className="min-h-[160px] focus:outline-none
+                        [&_.ProseMirror]:outline-none
+                        [&_.ProseMirror]:min-h-[160px]
+                        [&_.ProseMirror_h1]:text-2xl
+                        [&_.ProseMirror_h1]:font-bold
+                        [&_.ProseMirror_h1]:text-amber-400
+                        [&_.ProseMirror_h1]:mb-3
+                        [&_.ProseMirror_h2]:text-xl
+                        [&_.ProseMirror_h2]:font-bold
+                        [&_.ProseMirror_h2]:text-amber-300
+                        [&_.ProseMirror_h2]:mb-2
+                        [&_.ProseMirror_h3]:text-lg
+                        [&_.ProseMirror_h3]:font-semibold
+                        [&_.ProseMirror_h3]:text-amber-200
+                        [&_.ProseMirror_h3]:mb-2
+                        [&_.ProseMirror_p]:text-slate-300
+                        [&_.ProseMirror_p]:mb-2
+                        [&_.ProseMirror_strong]:text-amber-300
+                        [&_.ProseMirror_strong]:font-semibold
+                        [&_.ProseMirror_em]:text-slate-200
+                        [&_.ProseMirror_em]:italic
+                        [&_.ProseMirror_u]:underline
+                        [&_.ProseMirror_ul]:list-disc
+                        [&_.ProseMirror_ul]:ml-6
+                        [&_.ProseMirror_ul]:mb-2
+                        [&_.ProseMirror_ul]:text-slate-300
+                        [&_.ProseMirror_ol]:list-decimal
+                        [&_.ProseMirror_ol]:ml-6
+                        [&_.ProseMirror_ol]:mb-2
+                        [&_.ProseMirror_ol]:text-slate-300
+                        [&_.ProseMirror_li]:mb-1
+                        [&_.ProseMirror_a]:text-blue-400
+                        [&_.ProseMirror_a]:underline
+                        [&_.ProseMirror_a:hover]:text-blue-300"
+                />
             </div>
         </div>
     );

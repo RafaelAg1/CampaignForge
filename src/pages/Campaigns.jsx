@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import Tiptap from "./components/TipTap.jsx";
 import CampaignCard from "./components/CampaignCard.jsx";
-import {getCampanaActiva,deleteCampaign} from "./utils/geCampanaActiva.js"
+import {getCampanaActiva, deleteCampaign} from "./utils/geCampanaActiva.js"
 
 export default function Campaigns() {
     const [creandoCampana, setCreandoCampana] = useState(false);
@@ -11,7 +11,7 @@ export default function Campaigns() {
         return JSON.parse(localStorage.getItem("campaigns") || "[]");
     });
     const personajes = JSON.parse(localStorage.getItem("characters") || "[]")
-
+    const activa = getCampanaActiva(campaigns, personajes)
 
     const handleCampaing = (e) => {
         e.preventDefault()
@@ -31,7 +31,7 @@ export default function Campaigns() {
         setDescription("")
         setCreandoCampana(false)
     }
-    const handleDeleteCampaign = (id) =>{
+    const handleDeleteCampaign = (id) => {
         deleteCampaign({
             campaigns,
             setCampaigns,
@@ -39,87 +39,115 @@ export default function Campaigns() {
         })
     }
     return (
-        <div className="w-full min-h-screen flex flex-col items-center px-4">
+        <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center px-4 py-8">
 
-            <div className={'w-full bg-red-500 min-h-90 flex flex-row gap-4 mt-4 text-center'}>
-                <div className={'bg-black w-1/4 '}>
-                    <p className={'text-4xl'}>Número de campañas</p>
-                    <br/>
-                    <h1>{campaigns.length}</h1>
+            <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+
+                <div className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-lg p-6 hover:border-amber-500/50 transition-all duration-300">
+                    <p className="text-sm font-medium text-slate-400 uppercase tracking-wide mb-2">Campañas Totales</p>
+                    <h1 className="text-4xl font-bold text-amber-400">{campaigns.length}</h1>
                 </div>
-                <div className={'bg-black w-1/4 '}>
-                    <p className={'text-4xl'}>Número de personajes</p>
-                    <br/>
-                    <h1>{personajes.length}</h1>
+
+                <div className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-lg p-6 hover:border-emerald-500/50 transition-all duration-300">
+                    <p className="text-sm font-medium text-slate-400 uppercase tracking-wide mb-2">Personajes</p>
+                    <h1 className="text-4xl font-bold text-emerald-400">{personajes.length}</h1>
                 </div>
-                <div className={'bg-black w-1/4 '}>
-                    <p className={'text-4xl'}>Ultíma campaña creada</p>
-                    <p>Fecha de creación: {campaigns[campaigns.length - 1].created_at} </p>
-                    <br/>
-                    <h1>{campaigns[campaigns.length - 1].name}</h1>
+
+                <div className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-lg p-6 hover:border-blue-500/50 transition-all duration-300">
+                    <p className="text-sm font-medium text-slate-400 uppercase tracking-wide mb-2">Última Campaña</p>
+                    {campaigns.length > 0 ? (
+                        <div className="mt-2">
+                            <p className="text-lg font-semibold text-blue-400 truncate">{campaigns[0].name}</p>
+                            <p className="text-xs text-slate-500 mt-1">
+                                {new Date(campaigns[0].created_at).toLocaleDateString('es-ES')}
+                            </p>
+                        </div>
+                    ) : (
+                        <p className="text-sm text-slate-500 mt-2">Sin campañas</p>
+                    )}
                 </div>
-                <div className={'bg-black w-1/4 '}>
-                    <p className={'text-4xl'}>Campaña con más personajes</p>
-                    <br/>
-                    <h1>{getCampanaActiva(campaigns, personajes).name}</h1>
+
+                <div className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-lg p-6 hover:border-purple-500/50 transition-all duration-300">
+                    <p className="text-sm font-medium text-slate-400 uppercase tracking-wide mb-2">Más Activa</p>
+                    {activa ? (
+                        <div className="mt-2">
+                            <p className="text-lg font-semibold text-purple-400 truncate">{activa.name}</p>
+                            <p className="text-xs text-slate-500 mt-1">{activa.characterCount} personaje/s</p>
+                        </div>
+                    ) : (
+                        <p className="text-sm text-slate-500 mt-2">Sin actividad</p>
+                    )}
                 </div>
             </div>
 
-
-            <div className="flex justify-end w-full max-w-3xl mt-8">
+            {/* Create Campaign Button */}
+            <div className="flex justify-end w-full max-w-6xl mb-6">
                 <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                    className="px-6 py-3 bg-gradient-to-r bg-blue-900 text-white font-medium rounded-lg
+                     hover:scale-105"
                     onClick={() => setCreandoCampana(!creandoCampana)}
                 >
-                    {!creandoCampana ? "Crear campaña" : "Cerrar creación"}
+                    {!creandoCampana ? "Crear Campaña" : "✕ Cerrar"}
                 </button>
             </div>
 
+            {/* Create Campaign Form */}
             {creandoCampana && (
                 <form
-                    className="w-full max-w-4xl mt-6 p-6 bg-white text-gray-900 rounded-lg shadow
-                    flex flex-col gap-4 max-h-[80vh] overflow-y-auto "
+                    className="w-full max-w-6xl mb-8 p-8 bg-slate-800/70 backdrop-blur border border-slate-700/50
+                    rounded-lg shadow-2xl flex flex-col gap-6 max-h-[80vh] overflow-y-auto"
                     onSubmit={handleCampaing}
                 >
-                    <h1 className="text-2xl font-bold text-center">Creación de campaña</h1>
+                    <h1 className="text-3xl font-bold bg-clip-text bg-gradient-to-r text-amber-600">
+                        Nueva Campaña
+                    </h1>
 
-                    <label className="text-left font-semibold">Nombre de la campaña</label>
-                    <input
-                        type="text"
-                        className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        value={name}
-                        onChange={(e) => {
-                            setName(e.target.value)
-                        }}
-                    />
-
-                    <label className="text-left font-semibold">
-                        Descripción
-                    </label>
-
-                    <div className="border rounded max-h-64 overflow-y-auto">
-                        <Tiptap value={description} onChange={setDescription}/>
+                    <div>
+                        <label className="block text-sm font-medium text-slate-300 mb-2">
+                            Nombre de la campaña
+                        </label>
+                        <input
+                            type="text"
+                            required
+                            className="w-full border border-slate-600 bg-slate-900/50 rounded-lg px-4 py-3 text-slate-100
+                            focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
+                            placeholder="Ej: La Cueva del Ocro"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                     </div>
 
-                    <button className={'text-white bg-blue-600 hover:bg-blue-700 transition'} type={'submit'}>
-                        Crear
+                    <div>
+                        <label className="block text-sm font-medium text-slate-300 mb-2">
+                            Descripción
+                        </label>
+                        <div className="border border-slate-600 bg-slate-900/50 rounded-lg overflow-hidden max-h-64 overflow-y-auto">
+                            <Tiptap value={description} onChange={setDescription}/>
+                        </div>
+                    </div>
+
+                    <button
+                        className="w-full py-3 bg-gradient-to-r bg-blue-800 text-white font-semibold rounded-lg
+                         transition-all duration-300 shadow-lg hover:scale-[1.02]"
+                        type="submit"
+                    >
+                        Crear Campaña
                     </button>
                 </form>
             )}
 
-            <div className="w-full max-w-4xl mt-8 flex flex-col gap-4">
-                {
-                    campaigns.length === 0 ? (
-                        <p>No hay campañas todavia</p>
-                    ) : (
-                        campaigns.map((campaign) => (
-                            <CampaignCard key={campaign.id} campaign={campaign} onDelete={handleDeleteCampaign}/>
-
-                        ))
-                    )
-
-                }
-
+            {/* Campaigns List */}
+            <div className="w-full max-w-6xl flex flex-col gap-4">
+                {campaigns.length === 0 ? (
+                    <div className="text-center py-16 bg-slate-800/30 backdrop-blur border border-slate-700/50 rounded-lg">
+                        <p className="text-slate-400 text-lg">No hay campañas todavía</p>
+                        <p className="text-slate-500 text-sm mt-2">¡Crea tu primera aventura épica!</p>
+                    </div>
+                ) : (
+                    campaigns.map((campaign) => (
+                        <CampaignCard key={campaign.id} campaign={campaign} onDelete={handleDeleteCampaign}/>
+                    ))
+                )}
             </div>
 
         </div>

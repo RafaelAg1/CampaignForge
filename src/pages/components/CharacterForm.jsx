@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import {ArrowLeft} from "lucide-react";
 
 export default function CharacterForm({ onSubmit, submitLabel = "Guardar" }) {
     const navigate = useNavigate();
@@ -26,47 +27,45 @@ export default function CharacterForm({ onSubmit, submitLabel = "Guardar" }) {
 
     const volver = () => {
         const base = location.pathname.replace(/\/create$/, "");
-        navigate(base || "/"); // por si acaso
+        navigate(base || "/");
     };
 
     return (
-        <div className="min-h-screen w-full bg-slate-950 text-slate-100">
-            <div className="mx-auto max-w-4xl px-4 py-10">
+        <div className="min-h-screen w-full bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-8 px-4">
+            <div className="mx-auto max-w-4xl">
+
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                     <button
                         type="button"
                         onClick={volver}
-                        className="inline-flex items-center gap-2 rounded-lg bg-slate-800/60 px-3 py-2 text-sm font-semibold
-                       text-slate-100 ring-1 ring-white/10 backdrop-blur
-                       hover:bg-slate-800/80 hover:ring-white/20 transition"
+                        className="flex items-center gap-2 px-3 py-2 bg-slate-800 border border-slate-700
+                            text-slate-300 text-sm font-medium rounded-md hover:bg-slate-700 transition"
                     >
-                        <span className="text-lg leading-none">←</span>
+                        <ArrowLeft className="w-4 h-4" />
                         Volver
                     </button>
 
-                    <div className="text-right">
-                        <p className="text-sm text-slate-400">Personajes</p>
-                        <h1 className="text-xl font-bold tracking-tight">Nuevo personaje</h1>
-                    </div>
+                    <h1 className="text-2xl font-bold text-white">Nuevo Personaje</h1>
                 </div>
 
-                {/* Card */}
-                <div className="rounded-2xl bg-slate-900/60 ring-1 ring-white/10 shadow-xl backdrop-blur">
-                    <form onSubmit={handleSubmit} className="p-6 sm:p-8">
+                {/* Form Card */}
+                <div className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-lg shadow-lg p-8">
+                    <form onSubmit={handleSubmit}>
+
                         <div className="mb-6">
-                            <h2 className="text-2xl font-bold">Crea tu personaje</h2>
-                            <p className="mt-1 text-sm text-slate-400">
-                                Completa los datos básicos. Puedes editarlo más tarde.
+                            <p className="text-slate-400 text-sm">
+                                Completa los datos básicos de tu personaje
                             </p>
                         </div>
 
-                        {/* Campos en grid */}
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {/* Grid de campos */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
                             {/* Nombre */}
                             <div className="sm:col-span-2">
-                                <label className="mb-1 block text-sm font-semibold text-slate-200">
-                                    Nombre <span className="text-indigo-400">*</span>
+                                <label className="block text-sm font-medium text-slate-300 mb-2">
+                                    Nombre del personaje <span className="text-red-400">*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -74,17 +73,16 @@ export default function CharacterForm({ onSubmit, submitLabel = "Guardar" }) {
                                     value={formulario.nombre}
                                     onChange={handleChange}
                                     required
-                                    placeholder="Ej: Aria Sombranoche"
-                                    className="w-full rounded-lg bg-slate-800/70 px-3 py-2.5 text-slate-100
-                             ring-1 ring-white/10 outline-none
-                             placeholder:text-slate-500
-                             focus:ring-2 focus:ring-indigo-500 transition"
+                                    placeholder="Ej: Raven"
+                                    className="w-full border border-slate-600 bg-slate-900/50 rounded-lg px-4 py-3
+                                        text-slate-100 placeholder:text-slate-500
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 />
                             </div>
 
                             {/* Raza */}
                             <div>
-                                <label className="mb-1 block text-sm font-semibold text-slate-200">
+                                <label className="block text-sm font-medium text-slate-300 mb-2">
                                     Raza
                                 </label>
                                 <input
@@ -93,16 +91,15 @@ export default function CharacterForm({ onSubmit, submitLabel = "Guardar" }) {
                                     value={formulario.raza}
                                     onChange={handleChange}
                                     placeholder="Ej: Elfo"
-                                    className="w-full rounded-lg bg-slate-800/70 px-3 py-2.5 text-slate-100
-                             ring-1 ring-white/10 outline-none
-                             placeholder:text-slate-500
-                             focus:ring-2 focus:ring-indigo-500 transition"
+                                    className="w-full border border-slate-600 bg-slate-900/50 rounded-lg px-4 py-3
+                                        text-slate-100 placeholder:text-slate-500
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 />
                             </div>
 
                             {/* Clase */}
                             <div>
-                                <label className="mb-1 block text-sm font-semibold text-slate-200">
+                                <label className="block text-sm font-medium text-slate-300 mb-2">
                                     Clase
                                 </label>
                                 <input
@@ -111,16 +108,15 @@ export default function CharacterForm({ onSubmit, submitLabel = "Guardar" }) {
                                     value={formulario.clase}
                                     onChange={handleChange}
                                     placeholder="Ej: Pícaro"
-                                    className="w-full rounded-lg bg-slate-800/70 px-3 py-2.5 text-slate-100
-                             ring-1 ring-white/10 outline-none
-                             placeholder:text-slate-500
-                             focus:ring-2 focus:ring-indigo-500 transition"
+                                    className="w-full border border-slate-600 bg-slate-900/50 rounded-lg px-4 py-3
+                                        text-slate-100 placeholder:text-slate-500
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 />
                             </div>
 
                             {/* Edad */}
                             <div>
-                                <label className="mb-1 block text-sm font-semibold text-slate-200">
+                                <label className="block text-sm font-medium text-slate-300 mb-2">
                                     Edad
                                 </label>
                                 <input
@@ -130,33 +126,33 @@ export default function CharacterForm({ onSubmit, submitLabel = "Guardar" }) {
                                     value={formulario.edad}
                                     onChange={handleChange}
                                     placeholder="Ej: 24"
-                                    className="w-full rounded-lg bg-slate-800/70 px-3 py-2.5 text-slate-100
-                             ring-1 ring-white/10 outline-none
-                             placeholder:text-slate-500
-                             focus:ring-2 focus:ring-indigo-500 transition"
+                                    className="w-full border border-slate-600 bg-slate-900/50 rounded-lg px-4 py-3
+                                        text-slate-100 placeholder:text-slate-500
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 />
                             </div>
 
                             {/* Nivel */}
                             <div>
-                                <label className="mb-1 block text-sm font-semibold text-slate-200">
+                                <label className="block text-sm font-medium text-slate-300 mb-2">
                                     Nivel
                                 </label>
                                 <input
                                     type="number"
                                     name="nivel"
                                     min="1"
+                                    max="20"
                                     value={formulario.nivel}
                                     onChange={handleChange}
-                                    className="w-full rounded-lg bg-slate-800/70 px-3 py-2.5 text-slate-100
-                             ring-1 ring-white/10 outline-none
-                             focus:ring-2 focus:ring-indigo-500 transition"
+                                    className="w-full border border-slate-600 bg-slate-900/50 rounded-lg px-4 py-3
+                                        text-slate-100
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 />
                             </div>
 
                             {/* Descripción */}
                             <div className="sm:col-span-2">
-                                <label className="mb-1 block text-sm font-semibold text-slate-200">
+                                <label className="block text-sm font-medium text-slate-300 mb-2">
                                     Descripción
                                 </label>
                                 <textarea
@@ -164,32 +160,37 @@ export default function CharacterForm({ onSubmit, submitLabel = "Guardar" }) {
                                     value={formulario.descripcion}
                                     onChange={handleChange}
                                     rows={5}
-                                    placeholder="Historia, personalidad, rasgos, objetivos..."
-                                    className="w-full rounded-lg bg-slate-800/70 px-3 py-2.5 text-slate-100
-                             ring-1 ring-white/10 outline-none
-                             placeholder:text-slate-500
-                             focus:ring-2 focus:ring-indigo-500 transition resize-none"
+                                    placeholder="Historia, personalidad, rasgos físicos, objetivos..."
+                                    className="w-full border border-slate-600 bg-slate-900/50 rounded-lg px-4 py-3
+                                        text-slate-100 placeholder:text-slate-500
+                                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+                                        transition resize-none"
                                 />
                             </div>
                         </div>
 
-                        {/* Footer */}
-                        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        {/* Botones */}
+                        <div className="mt-8 flex flex-col-reverse sm:flex-row gap-3 sm:justify-between">
                             <button
                                 type="button"
-                                onClick={() => setFormulario({ nombre: "", edad: "", raza: "", clase: "", nivel: 1, descripcion: "" })}
-                                className="rounded-lg bg-slate-800/60 px-4 py-2.5 text-sm font-semibold
-                           ring-1 ring-white/10 hover:bg-slate-800/80 transition"
+                                onClick={() => setFormulario({
+                                    nombre: "",
+                                    edad: "",
+                                    raza: "",
+                                    clase: "",
+                                    nivel: 1,
+                                    descripcion: ""
+                                })}
+                                className="px-4 py-2 bg-slate-700 border border-slate-600 text-slate-300
+                                    rounded-md hover:bg-slate-600 transition text-sm font-medium"
                             >
-                                Limpiar
+                                Limpiar formulario
                             </button>
 
                             <button
                                 type="submit"
-                                className="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold
-                           shadow-lg shadow-indigo-600/20
-                           hover:bg-indigo-700 transition
-                           focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                                className="px-6 py-2 bg-blue-800 text-white font-medium rounded-md
+                                     transition shadow-lg"
                             >
                                 {submitLabel}
                             </button>
@@ -198,8 +199,8 @@ export default function CharacterForm({ onSubmit, submitLabel = "Guardar" }) {
                 </div>
 
                 {/* Hint */}
-                <p className="mt-4 text-center text-xs text-slate-500">
-                    Consejo: usa descripciones cortas y luego amplía con detalles importantes.
+                <p className="mt-4 text-center text-sm text-slate-500">
+                    Tip: Solo el nombre es obligatorio. Puedes completar el resto después.
                 </p>
             </div>
         </div>
